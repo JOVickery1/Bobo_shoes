@@ -299,7 +299,7 @@ for i in range (duration):
     # push to replayBuffer (replay memory in slides) standard insert removes first entry to make room
     replayBuffer.push(latest_experience)
 
-    if i== 100: print(f'Replay Buffer: {replayBuffer.sample(5)}')
+    if i== 100: print(f'Replay Buffer: {replayBuffer.sample(mini_batch_size)}')
 
     # Create for loop to do loss accumulation
     # minibatch = replayBuffer.sample(mini_batch_size)
