@@ -1,3 +1,16 @@
+"""
+Program written by James Vickery with sections taken from PyBullet quickstart guide and Hod Lipson's tutorial
+
+Current state of the program: 
+Train a neural network on random data
+NN takes in 8 floats (current joint angles) and returns 8 floats (next joint angles)
+It gets trained on random data generated as numpy arrays
+
+Then the framework for a reinforcement learning DQN is setup with a replay buffer
+The replay buffer gets initialized to be full before the first (and only) episode
+Then the 
+"""
+
 import pybullet as p
 import time
 import pybullet_data
@@ -41,11 +54,11 @@ class ReplayBuffer:
         """Randomly sample a batch of experiences from memory."""
         batch = random.sample(self.memory, batch_size)
         
-        states = torch.tensor(np.array([exp.state for exp in batch]), dtype=torch.float32)
-        actions = torch.tensor([exp.action for exp in batch], dtype=torch.int64)
-        rewards = torch.tensor([exp.reward for exp in batch], dtype=torch.float32)
-        next_states = torch.tensor([exp.next_state for exp in batch], dtype=torch.float32)
-        dones = torch.tensor([exp.done for exp in batch], dtype=torch.uint8)
+        states = torch.tensor(np.array([exp.state for exp in batch]), dtype=torch.float32, device=device)
+        actions = torch.tensor(np.array([exp.action for exp in batch]), dtype=torch.int64, device=device) # This being an int64 may be an issue!
+        rewards = torch.tensor(np.array([exp.reward for exp in batch]), dtype=torch.float32, device=device)
+        next_states = torch.tensor(np.array([exp.next_state for exp in batch]), dtype=torch.float32, device=device)
+        dones = torch.tensor(np.array([exp.done for exp in batch]), dtype=torch.uint8, device=device)
         
         return states, actions, rewards, next_states, dones
 
@@ -114,8 +127,10 @@ def train(model, train_loader, optimizer, criterion):
 # modify for complexity as needed
 def predict(model, inputs):
     outputs = model(inputs)
+    # Maybe make it so that it outputs in degrees or something? 
     return outputs  
 
+'''----------- Generating Synthetic Data------------'''
 # Set the size of the synthetic data
 n = 1000  # For example, you can set it to any desired value
 
@@ -124,12 +139,13 @@ synthetic_data = np.random.uniform(-100, 100, size=(n, 8))
 synthetic_labels = np.random.uniform(-100, 100, size=(n, 8))
 
 # Making it a tensor
-syn_data_tensor = torch.tensor(synthetic_data, dtype=torch.float32).to(device)
-syn_labels_tensor = torch.tensor(synthetic_labels, dtype=torch.float32).to(device)
+syn_data_tensor = torch.tensor(synthetic_data, dtype=torch.float32, device=device)
+syn_labels_tensor = torch.tensor(synthetic_labels, dtype=torch.float32, device=device)
 
 # Putting it into a Dataset
 init_data_set = MyDataset(syn_data_tensor, syn_labels_tensor)
 
+'''------------ Instantiating and defining some hyper parameters -----------'''
 # Defining a batch_size
 batch_size = 100
 
@@ -139,14 +155,16 @@ train_loader = torch.utils.data.DataLoader(init_data_set, batch_size=batch_size,
 bobo_model = Net(8)
 bobo_model = bobo_model.cuda()
 
+'''------------ Training the model -------------'''
 epochs = 100
-
 for epoch in range(epochs):
     train(bobo_model, train_loader=train_loader, criterion = nn.MSELoss(), optimizer = optim.Adam(bobo_model.parameters(), lr=0.001))
     if epoch % 50 == 0: print("Training!")
 
+# Speeds up compute time from when I was just passing the network straight through without attempting to train
 # bobo_model.eval()
 
+'''------------ DQN/RL stuff --------------'''
 # Initializing the target model (target Q-function)
 bobo_model_target = Net(8)
 # Making the target model a copy of the original model
@@ -155,8 +173,8 @@ bobo_model_target.load_state_dict(bobo_model.state_dict())
 # Defining the capacity of the replay buffer (replay memory)
 buffer_size = 100
 
-# Setting replayBuffer to have a max capacity of 100 experiences
-replayBuffer = ReplayBuffer(buffer_size)
+# Defining the size of each mini_batch - 10 is arbitrary start point
+mini_batch_size = 10
 
 '''------------------START PYBULLET CODE------------------'''
 
@@ -181,6 +199,13 @@ b = 0.25
 amplitudes = [a,b,a,b,a,b,a,b]
 freq = 0.05
 
+'''------------ Beginning of Episode Stuff -----------'''
+
+# Eventually should add a surrounding for loop with 
+
+# Setting replayBuffer to have a max capacity of buffer_size experiences
+replayBuffer = ReplayBuffer(buffer_size)
+
 # Setting up simulation duration
 duration = 10000
 
@@ -202,45 +227,88 @@ for i in range (duration):
     # input_states = [entry[0] for entry in joint_states] #THIS is the individual image state variable thing (x_t from slides)"""
     
     # Pull out only the joint angle values (joint positions in documentation)
-    joint_angles = [entry[0] for entry in joint_states] #THIS is the individual image state variable thing (x_t from slides)
-    # This is just so I don't have to change the code
+    joint_angles = np.array([entry[0] for entry in joint_states]) #THIS is the individual image state variable thing (x_t from slides)
+    # This is just so I don't have to change the downstream code
     input_states = joint_angles
     
     # Check input_states if they seem correct
     if i <= 50: print(f"-----{input_states}-----")
 
     # initialize tensor with input_states and send to compute device
-    input_tensor = torch.tensor(input_states).to(device)
+    input_tensor = torch.tensor(input_states, dtype=torch.float32, device=device)
+    # Commented out below line because it creates an issue with converting to numpy with batching above
+    # joint_angles = torch.tensor(joint_angles, dtype=torch.float32, device=device)
     # print(input_tensor.shape)
-
+    
+    # This is where we get our action. May need to discretize the action space by converting to degrees and then back to rad?
     if random_num >= epsilon:
         # Get target positions from a forward pass of this model 
         target_positions = bobo_model(input_tensor)
     else:
-        target_positions = np.random.uniform(low=-1.57/2, high=1.57/2, size=(8))  
+        target_positions = torch.tensor(np.random.uniform(low=-1.57/2, high=1.57/2, size=(8)), device=device)  
 
     # This just checks to see what the values are
     if i <= 50: print(f'TARGET POS: {target_positions}')
 
     # Execute action from forward pass of model and step the simulation
-    p.setJointMotorControlArray(robotId, joint_indices, control_mode, target_positions)
+    p.setJointMotorControlArray(robotId, joint_indices, control_mode, target_positions) # Make sure target_positions is in rad
     p.stepSimulation()
+
+    base_state = p.getLinkState(robotId, 0, computeLinkVelocity = True)
+
+    # Extract out the base CoM location - World location
+    base_position = np.array(base_state[0])
+
+    # Extract out the base CoM orientation (quaternion) - World orientation
+    base_orientation = np.array(base_state[1])
+
+    # Extract out base linear velocity - SEE DOCUMENTATION this says it's worldLink vs linkWorld
+    base_vel = np.array(base_state[6]) # I don't get the implications of link vs world vs URDF frames
 
     # Observe the reward here:
     '''Figure out how to calculate the reward, probably use if statements based on the center of mass'''
-    # reward = 
-    
+    reward = np.array([0]) # Temporary value until I come up with good reward
+    # reward = torch.tensor(reward, dtype=torch.float32, device=device) # might need to add a dimension with .view()
     # Getting the new joint state again NOT THE STATE VARIABLE
     new_joint_states = p.getJointStates(robotId,joint_indices)
 
     # Extracting only the joint angle values
-    new_joint_angles = [entry[0] for entry in new_joint_states]
+    new_joint_angles = np.array([entry[0] for entry in new_joint_states])
+    # Dangerous make sure data types line up -- ALSO ensure that dimensions all line up
+    # new_joint_angles = torch.tensor(new_joint_angles, dtype=torch.float32, device=device)
 
     # done thing? I guess use done when episode is over
-    # done = something????
+    # Maybe make done true if it tips over and then reset the simulation?
+    done = np.array([0]) # something???? 
+    # done = torch.tensor(done, dtype=torch.uint8, device=device) # make sure the .shape() of this works well here, might need to add a dimension
 
-    # latest_experience = Experience(input_states, target_positions, reward, new_joint_states, done)
+    # converst target_positions (random act or output of bobo_model) to a numpy array
+    # Also converts from radians to degrees for angles, THIS IS SO THAT WHEN IT CONVERTS TO AN INT IT DOESN'T JUST ROUND TO 0
+    current_action = target_positions.cpu().detach().numpy()
+    current_action = current_action*(180/(np.pi)) # Need to deal with the fact that it goes to degrees in the replay
 
+    if i==101: print(f'CURRENT ACTION: {current_action}')
+
+    # Collect what we have in an instance of the Experience class (namedTuple)
+    # latest_experience = Experience(joint_angles, target_positions, reward, new_joint_angles, done)
+    # This is like the above line, but uses .numpy() version of target_positions defined above
+    latest_experience = Experience(joint_angles, current_action, reward, new_joint_angles, done)
+
+    if i == 55: print(latest_experience)
+    
+    # push to replayBuffer (replay memory in slides) standard insert removes first entry to make room
+    replayBuffer.push(latest_experience)
+
+    if i== 100: print(f'Replay Buffer: {replayBuffer.sample(5)}')
+
+    # Create for loop to do loss accumulation
+    # minibatch = replayBuffer.sample(mini_batch_size)
+    # for each Experience in minibatch from Memory - I think QA = bobo_model and QT = bobo_model_target
+    #   Calculate loss using QA(state,action) - [reward + gamma* max(QT(next_state, action))]
+    #   Add to running gradients
+    # Perform gradient descent step on bobo_model
+
+    # Sleep for gui simulation viewing purposes only, delete if actually training
     time.sleep(1./240.)
 cubePos, cubeOrn = p.getBasePositionAndOrientation(robotId)
 print(cubePos,cubeOrn)
