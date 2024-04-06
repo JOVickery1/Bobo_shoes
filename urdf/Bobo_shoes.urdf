@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Bobo_shoes">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00010649 0.038205 -0.00019677"
+        rpy="0 0 0" />
+      <mass
+        value="1.4208" />
+      <inertia
+        ixx="0.0017927"
+        ixy="2.4302E-06"
+        ixz="-2.1942E-07"
+        iyy="0.0036662"
+        iyz="3.6126E-07"
+        izz="0.0020571" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link_1">
+    <inertial>
+      <origin
+        xyz="0.023574 0.02515 0.080557"
+        rpy="0 0 0" />
+      <mass
+        value="0.083092" />
+      <inertia
+        ixx="6.4238E-05"
+        ixy="-2.1796E-07"
+        ixz="-6.6422E-07"
+        iyy="6.3326E-05"
+        iyz="-1.6043E-05"
+        izz="1.75E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1"
+    type="revolute">
+    <origin
+      xyz="0.1049 0 -0.032125"
+      rpy="2.5078 1.5708 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link_1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_2">
+    <inertial>
+      <origin
+        xyz="0.0241545629458776 -0.064141958662364 0.0461530494688376"
+        rpy="0 0 0" />
+      <mass
+        value="0.0794251949247651" />
+      <inertia
+        ixx="0.000105991529822171"
+        ixy="5.44628841125708E-08"
+        ixz="-5.47187122987762E-08"
+        iyy="6.07427935489942E-05"
+        iyz="4.66916520913843E-05"
+        izz="6.0437364979308E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_2"
+    type="revolute">
+    <origin
+      xyz="0 0.041216 0.1317"
+      rpy="-2.3481 0 0" />
+    <parent
+      link="link_1" />
+    <child
+      link="link_2" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_3">
+    <inertial>
+      <origin
+        xyz="-0.023276 0.031256 0.07839"
+        rpy="0 0 0" />
+      <mass
+        value="0.083093" />
+      <inertia
+        ixx="6.4239E-05"
+        ixy="-2.6829E-07"
+        ixz="-6.456E-07"
+        iyy="6.0603E-05"
+        iyz="-1.9359E-05"
+        izz="2.0224E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_3"
+    type="revolute">
+    <origin
+      xyz="0.1049 0 0.033525"
+      rpy="2.5462 1.5708 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link_3" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_4">
+    <inertial>
+      <origin
+        xyz="-0.0226954374846085 -0.0586522682265568 0.0529547909931943"
+        rpy="0 0 0" />
+      <mass
+        value="0.0794253330989273" />
+      <inertia
+        ixx="0.000105991857636258"
+        ixy="4.80859268104431E-08"
+        ixz="-6.03993729558542E-08"
+        iyy="7.09897909834876E-05"
+        iyz="4.55191839954083E-05"
+        izz="5.01907218094876E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_4"
+    type="revolute">
+    <origin
+      xyz="0 0.051198 0.12815"
+      rpy="-2.3311 0 0" />
+    <parent
+      link="link_3" />
+    <child
+      link="link_4" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_5">
+    <inertial>
+      <origin
+        xyz="0.023574 0.036666 0.07601"
+        rpy="0 0 0" />
+      <mass
+        value="0.083093" />
+      <inertia
+        ixx="6.4239E-05"
+        ixy="-3.1282E-07"
+        ixz="-6.2524E-07"
+        iyy="5.7702E-05"
+        iyz="-2.1988E-05"
+        izz="2.3125E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_5"
+    type="revolute">
+    <origin
+      xyz="-0.1451 0 -0.032125"
+      rpy="2.5813 1.5708 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link_5" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_6">
+    <inertial>
+      <origin
+        xyz="0.024155 -0.059629 0.051853"
+        rpy="0 0 0" />
+      <mass
+        value="0.079425" />
+      <inertia
+        ixx="0.00010599"
+        ixy="4.9202E-08"
+        ixz="-5.9493E-08"
+        iyy="6.9287E-05"
+        iyz="4.5875E-05"
+        izz="5.1894E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_6"
+    type="revolute">
+    <origin
+      xyz="0 0.060042 0.12425"
+      rpy="-2.3755 0 0" />
+    <parent
+      link="link_5" />
+    <child
+      link="link_6" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_7">
+    <inertial>
+      <origin
+        xyz="-0.023276 0.036917 0.075888"
+        rpy="0 0 0" />
+      <mass
+        value="0.083093" />
+      <inertia
+        ixx="6.4239E-05"
+        ixy="-3.1489E-07"
+        ixz="-6.242E-07"
+        iyy="5.7556E-05"
+        iyz="-2.2102E-05"
+        izz="2.3271E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_7.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_7.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_7"
+    type="revolute">
+    <origin
+      xyz="-0.1451 0 0.033525"
+      rpy="2.5829 1.5708 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link_7" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+  <link
+    name="link_8">
+    <inertial>
+      <origin
+        xyz="-0.022695 -0.06334 0.047247"
+        rpy="0 0 0" />
+      <mass
+        value="0.079425" />
+      <inertia
+        ixx="0.00010599"
+        ixy="5.3515E-08"
+        ixz="-5.5645E-08"
+        iyy="6.2346E-05"
+        iyz="4.6659E-05"
+        izz="5.8835E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_8.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Bobo_shoes/meshes/link_8.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_8"
+    type="revolute">
+    <origin
+      xyz="0 0.060452 0.12405"
+      rpy="-2.4146 0 0" />
+    <parent
+      link="link_7" />
+    <child
+      link="link_8" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.78"
+      upper="0.78"
+      effort="1.667"
+      velocity="5.5" />
+  </joint>
+</robot>
