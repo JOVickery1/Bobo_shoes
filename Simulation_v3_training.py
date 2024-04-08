@@ -20,7 +20,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import Dataset
-from torch.utils.data import DataLoader, random_split, default_collate
+from torch.utils.data import DataLoader
 
 import random
 from collections import deque, namedtuple
